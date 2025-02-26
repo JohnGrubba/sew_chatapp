@@ -1,10 +1,10 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import ProfileView from '../views/ProfileView.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import LogoutView from '../views/LogoutView.vue'
 import RefreshView from '../views/RefreshView.vue'
+import HomeView from '../views/HomeView.vue'
 import { useAuthStore } from '../store/auth'
 
 const routes = [
@@ -38,26 +38,26 @@ const routes = [
         path: '/refresh',
         name: 'Refresh',
         component: RefreshView,
-    },
+    }
 ]
 
 const router = createRouter({
-    history: createWebHashHistory(),
+    history: createWebHistory(),
     routes, // short for `routes: routes`
 })
 
-router.beforeEach((to, from , next) => {
-    const auth = useAuthStore();
+router.beforeEach((to, from, next) => {
+    const auth = useAuthStore()
     if (to.matched.some((record) => record.meta.requiresAuth)) {
         if (auth.isAuthenticated) {
-            next();
-            return;
+            next()
+            return
         }
-        next("/login");
+        next("/login")
     } else {
-        next();
+        next()
     }
 
 })
 
-export default router;
+export default router

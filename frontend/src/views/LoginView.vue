@@ -1,7 +1,7 @@
 <template>
     <div class="row d-flex justify-content-center mx-auto mt-5">
         <div class="col-4 pt-6">
-            <form>
+            <form action="" onsubmit="return false;">
                 <div class="form-group">
                     <label for="usernameField">Username</label>
                     <input v-model="form.username" type="text" class="form-control" id="usernameField">
@@ -10,6 +10,7 @@
                     <label for="passwordField">Password</label>
                     <input v-model="form.password" type="password" class="form-control" id="passwordField">
                 </div>
+                <a href="/register">Register</a>
                 <div class="d-flex justify-content-center">
                     <button type="submit" class="btn btn-primary" v-on:click="submit">Login</button>
                 </div>
@@ -18,24 +19,24 @@
     </div>
 
 </template>
-  
+
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useAuthStore } from '../store/auth';
+import { ref, onMounted } from 'vue'
+import { useAuthStore } from '../store/auth'
 
 const form = ref({
     username: '',
     password: ''
-});
+})
 
-const auth = useAuthStore();
+const auth = useAuthStore()
 
 const submit = async () => {
-    await auth.login(form.value);
+    await auth.login(form.value)
 }
 
 onMounted(() => {
-    auth.refreshForLogin();
+    auth.refreshForLogin()
 });
 
 

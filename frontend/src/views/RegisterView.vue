@@ -14,6 +14,7 @@
                     <label for="birthdayField">Birthday </label>
                     <input v-model="form.birthday" type="date" class="form-control" id="birthdayField">
                 </div>
+                <a href="/login">Login</a>
                 <div class=" d-flex justify-content-center">
                     <button type="submit" class="btn btn-primary" v-on:click="submit">Register</button>
                 </div>
@@ -23,17 +24,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { registerUser } from '../store/user';
+import { ref } from 'vue'
+import { registerUser } from '../store/user'
 
 const form = ref({
     username: '',
     password: '',
     birthday: '',
-});
+})
 
 const submit = async () => {
-    registerUser(form.value);
+    registerUser(form.value)
 }
 
 </script>
