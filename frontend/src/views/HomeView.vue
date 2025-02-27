@@ -171,6 +171,16 @@ const chats = ref([
             { sender: 'me', text: "Servus", time: '12: 31' }
         ]
     },
+    {
+        name: 'Yeyo Yayiya',
+        lastMessage: 'Nonamiga',
+        time: '12:30',
+        online: true,
+        messages: [
+            { sender: 'other', text: 'Nenonayoyas', time: '12: 30' },
+            { sender: 'me', text: "Senonasonas", time: '12: 31' }
+        ]
+    },
 ])
 
 const selectedChatIndex = ref(0)
