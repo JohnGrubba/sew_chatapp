@@ -2,59 +2,9 @@
     <div class="flex h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
         <!-- Sidebar -->
         <div class="w-1/4 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
-            <!-- User profile section -->
-            <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center">
-                <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold">
-                    {{ me.username.charAt(0).toUpperCase() }}
-                </div>
-                <div class="ml-3 flex-1">
-                    <p class="text-base font-medium text-gray-800 dark:text-white">{{ me.username }}</p>
-                    <p class="text-xs text-gray-500 dark:text-gray-400">Online</p>
-                </div>
-                <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Search bar -->
-            <div class="p-4 border-b border-gray-200 dark:border-gray-700">
-                <div class="relative">
-                    <input type="text" placeholder="Search conversations..."
-                        class="w-full py-2 px-4 pr-8 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute right-3 top-2.5 text-gray-400"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Conversation list -->
-            <div class="flex-1 overflow-y-auto">
-                <div v-for="(chat, index) in chats" :key="index" @click="selectChat(index)" :class="[
-                    'p-4 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
-                    selectedChatIndex === index ? 'bg-gray-100 dark:bg-gray-700' : ''
-                ]">
-                    <div class="relative">
-                        <div
-                            class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 flex items-center justify-center text-white font-bold">
-                            {{ chat.name.charAt(0).toUpperCase() }}
-                        </div>
-                        <div v-if="chat.online"
-                            class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-white dark:border-gray-800">
-                        </div>
-                    </div>
-                    <div class="ml-3 flex-1 overflow-hidden">
-                        <p class="text-sm font-medium text-gray-800 dark:text-white truncate">{{ chat.name }}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ chat.lastMessage }}</p>
-                    </div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">{{ chat.time }}</div>
-                </div>
-            </div>
+            <UserProfile />
+            <SearchBar />
+            <ConversationList />
         </div>
 
         <!-- Main chat area -->
@@ -154,9 +104,10 @@
 </template>
 
 <script setup>
-import { useProfile } from '../store/me'
+import UserProfile from '../components/chat/UserProfile.vue'
+import SearchBar from '../components/chat/SearchBar.vue'
+import ConversationList from '../components/chat/ConversationList.vue'
 import { useChatStore } from '../store/chat'
 
-const { me } = useProfile()
 const { chats, selectedChatIndex, selectedChat, newMessage, selectChat, sendMessage } = useChatStore()
 </script>
