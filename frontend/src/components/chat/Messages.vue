@@ -23,5 +23,5 @@
 </template>
 
 <script setup>
-import { selectedChat } from '../../store/chat'
+import { selectedChat, messagesContainer } from '../../store/chat'
 </script>

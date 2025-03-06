@@ -26,7 +26,7 @@ export const chats = ref([
 
 export const selectedChatIndex = ref(0)
 export const newMessage = ref('')
-const messagesContainer = ref(null)
+export const messagesContainer = ref(null)
 
 export const selectedChat = computed(() => {
     return selectedChatIndex.value !== null ? chats.value[selectedChatIndex.value] : null
