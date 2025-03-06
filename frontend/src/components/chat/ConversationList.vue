@@ -23,7 +23,5 @@
 </template>
 
 <script setup>
-import { useChatStore } from '../../store/chat'
-
-const { chats, selectedChatIndex, selectedChat, newMessage, selectChat, sendMessage } = useChatStore()
+import { selectChat, chats, selectedChatIndex } from '../../store/chat'
 </script>
