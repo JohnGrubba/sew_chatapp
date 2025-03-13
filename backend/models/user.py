@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import Column, VARCHAR, DATE, DateTime
+from sqlalchemy.orm import relationship
 
 from database.config import Base
 
@@ -13,6 +14,9 @@ class UserModels(Base):
     birthday = Column(DATE)
     create_time = Column(DateTime, default=datetime.utcnow())
     last_login = Column(DateTime, default=datetime.utcnow())
+
+    # Relationships
+    chats = relationship("ChatUsers", back_populates="user")
 
     def __init__(self, username: str, password: str, birthday: datetime):
         self.username = username
