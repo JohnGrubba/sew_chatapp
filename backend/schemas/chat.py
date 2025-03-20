@@ -21,6 +21,10 @@ class ChatCreate(BaseModel):
     name: str
 
 
+class DeleteChat(BaseModel):
+    chat_id: int
+
+
 class MessageCreate(BaseModel):
     chat_id: int
     content: str

@@ -26,6 +26,23 @@ async def create_chat(
     return await db.create_chat(chat, current_user.username)
 
 
+@router.delete("")
+async def delete_chat(
+    chat: chat_schema.DeleteChat,
+    db: ChatCRUD = Depends(get_chat_crud),
+):
+    return await db.remove_chat(chat.chat_id)
+
+
+@router.patch("")
+async def update_chat(
+    chat_id: int,
+    chat: chat_schema.ChatCreate,
+    db: ChatCRUD = Depends(get_chat_crud),
+):
+    return await db.update_chat(chat_id, chat)
+
+
 @router.post("/add_member")
 async def add_member(
     chat: chat_schema.AddChatMember,

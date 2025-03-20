@@ -46,3 +46,8 @@ class ChatCRUD:
         stmt = delete(ChatModels).where(ChatModels.id == chat_id)
         await self.db_session.execute(stmt)
         await self.db_session.commit()
+
+    async def update_chat(self, chat_id: int, chat: chat_schema.ChatCreate):
+        stmt = update(ChatModels).where(ChatModels.id == chat_id).values(name=chat.name)
+        stmt.execution_options(synchronize_session="fetch")
+        await self.db_session.execute(stmt)

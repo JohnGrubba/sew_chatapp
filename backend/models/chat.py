@@ -8,8 +8,12 @@ from database.config import Base
 class ChatUsers(Base):
     __tablename__ = "chat_users"
 
-    chat_id = Column(Integer, ForeignKey("chats.id"), primary_key=True)
-    username = Column(VARCHAR, ForeignKey("users.username"), primary_key=True)
+    chat_id = Column(
+        Integer, ForeignKey("chats.id", ondelete="cascade"), primary_key=True
+    )
+    username = Column(
+        VARCHAR, ForeignKey("users.username", ondelete="cascade"), primary_key=True
+    )
     joined_at = Column(DateTime, default=datetime.utcnow())
 
     # Relationships
@@ -31,7 +35,7 @@ class ChatModels(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(VARCHAR(100), nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow())
-    created_by = Column(VARCHAR, ForeignKey("users.username"))
+    created_by = Column(VARCHAR, ForeignKey("users.username", ondelete="cascade"))
 
     # Relationships
     users = relationship("ChatUsers", back_populates="chat")
@@ -49,8 +53,12 @@ class Message(Base):
     __tablename__ = "messages"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    chat_id = Column(Integer, ForeignKey("chats.id"), nullable=False)
-    sender = Column(VARCHAR, ForeignKey("users.username"), nullable=False)
+    chat_id = Column(
+        Integer, ForeignKey("chats.id", ondelete="cascade"), nullable=False
+    )
+    sender = Column(
+        VARCHAR, ForeignKey("users.username", ondelete="cascade"), nullable=False
+    )
     content = Column(Text, nullable=False)
     sent_at = Column(DateTime, default=datetime.utcnow())
 

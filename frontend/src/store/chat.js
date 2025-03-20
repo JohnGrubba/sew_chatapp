@@ -1,35 +1,34 @@
 import { ref, computed, watch, nextTick } from 'vue'
+import { apiGetChats } from '../api/chat'
 
 // Mock data - replace with your actual data source
-export const chats = ref([
-    {
-        name: 'Alehandras Sholz',
-        lastMessage: 'Dere',
-        time: '12:30',
-        online: true,
-        messages: [
-            { sender: 'other', text: 'Dere', time: '12: 30' },
-            { sender: 'me', text: "Servus", time: '12: 31' }
-        ]
-    },
-    {
-        name: 'Yeyo Yayiya',
-        lastMessage: 'Nonamiga',
-        time: '12:30',
-        online: true,
-        messages: [
-            { sender: 'other', text: 'Nenonayoyas', time: '12: 30' },
-            { sender: 'me', text: "Senonasonas", time: '12: 31' }
-        ]
-    },
-])
+export const chats = ref([])
+
+const fetchChats = async () => {
+    try {
+        const res = await apiGetChats()
+        chats.value = res.data
+        console.log(chats.value)
+    }
+    catch (err) {
+        console.log("ChatsError", err)
+    }
+}
+
 
 export const selectedChatIndex = ref(0)
 export const newMessage = ref('')
 export const messagesContainer = ref(null)
 
 export const selectedChat = computed(() => {
-    return selectedChatIndex.value !== null ? chats.value[selectedChatIndex.value] : null
+    console.log("Chat Switched (load messages)")
+    if (selectedChatIndex.value !== null) {
+        chats.value[selectedChatIndex.value].messages = [
+            { sender: 'me', text: 'Hello', time: '12:00 PM' },
+        ]
+        return chats.value[selectedChatIndex.value]
+    }
+    return null
 })
 
 export const selectChat = (index) => {
@@ -67,3 +66,5 @@ watch(() => selectedChatIndex.value, () => {
         }
     })
 })
+
+fetchChats()

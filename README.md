@@ -98,7 +98,7 @@ Click image to watch demo video on YouTube ☝️
 ## Development
 - Database
 ```
-docker run --name fastapi_vue_oauth2_postgresql -e POSTGRES_USER=fastapi_vue_user -e POSTGRES_PASSWORD=fastapi_vue_password -e POSTGRES_DB=fastapi_vue_dev -p 5432:5432 -d -v postgres_data_dev:/var/lib/postgresql/data postgres:15.1 
+docker run --name fastapi_vue_oauth2_postgresql -e POSTGRES_USER=fastapi_vue_user -e POSTGRES_PASSWORD=fastapi_vue_password -e POSTGRES_DB=fastapi_vue_dev -p 5432:5432 -d -v postgres_data_dev:/var/lib/postgresql/data postgres:15.1
 ```
 - Backend
     <br>
