@@ -12,9 +12,10 @@ router = APIRouter(prefix="/chat", tags=["chat"])
 
 @router.get("")
 async def get_chats(
+    current_user: user_schema.Base = Depends(get_current_user),
     db: ChatCRUD = Depends(get_chat_crud),
 ):
-    return await db.get_chats()
+    return await db.get_chats(current_user.username)
 
 
 @router.post("")

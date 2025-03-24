@@ -15,8 +15,12 @@ class ChatCRUD:
     def __init__(self, db_session: AsyncSession = None):
         self.db_session = db_session
 
-    async def get_chats(self):
-        stmt = select(ChatModels)
+    async def get_chats(self, username: str):
+        stmt = (
+            select(ChatModels)
+            .options(lazyload(ChatModels.users))
+            .where(ChatModels.created_by == username)
+        )
         result = await self.db_session.execute(stmt)
         chats = result.scalars().all()
         return chats

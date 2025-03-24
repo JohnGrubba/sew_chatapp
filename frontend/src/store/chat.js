@@ -1,7 +1,6 @@
-import { ref, computed, watch, nextTick } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { computedAsync } from '@vueuse/core'
 import { apiGetChats, apiGetMessages, apiSendMessage } from '../api/chat'
-import { useProfile } from './me'
 
 // Mock data - replace with your actual data source
 export const chats = ref([])
@@ -10,7 +9,7 @@ function dateFormatter(date) {
     return date.toLocaleDateString(navigator.language, { hour: '2-digit', minute: '2-digit' })
 }
 
-const fetchChats = async () => {
+export const fetchChats = async () => {
     try {
         const res = await apiGetChats()
         chats.value = res.data
@@ -31,15 +30,12 @@ const fetchMessages = async (chatId) => {
     }
 }
 
-export const selectedChatIndex = ref(0)
+export const selectedChatIndex = ref(null)
 export const newMessage = ref('')
 export const messagesContainer = ref(null)
 
 export const selectedChat = computedAsync(async () => {
     console.log("Chat Switched (load messages)")
-    selectedChatIndex.value = selectedChatIndex.value || chats.value[0].id
-    console.log("Selected Chat Index", selectedChatIndex.value)
-
     if (selectedChatIndex.value !== null) {
         const res = await fetchMessages(chats.value[selectedChatIndex.value].id)
         console.log(res)
@@ -63,17 +59,17 @@ export const selectChat = (index) => {
 export const sendMessage = async () => {
     if (!newMessage.value.trim() || !selectedChat.value) return
 
+    const sent = await apiSendMessage(selectedChat.value.id, newMessage.value)
+
     const message = {
         sender: 'me',
         text: newMessage.value,
-        time: dateFormatter(new Date())
+        time: dateFormatter(new Date(sent.data.sent_at))
     }
-
-    await apiSendMessage(selectedChat.value.id, newMessage.value)
 
     selectedChat.value.messages.push(message)
     selectedChat.value.lastMessage = `You: ${newMessage.value}`
-    selectedChat.value.time = message.time
+    selectedChat.value.time = new Date(sent.data.sent_at).toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' })
 
     newMessage.value = ''
 
@@ -85,6 +81,12 @@ export const sendMessage = async () => {
     })
 }
 
+// Add this function to your existing chat store
+export function addNewChat(chat) {
+    chats.value.unshift(chat) // Add new chat to the beginning of the list
+    selectChat(0) // Select the newly created chat
+}
+
 // Auto scroll to bottom when messages change
 watch(() => selectedChatIndex.value, () => {
     nextTick(() => {
@@ -93,5 +95,3 @@ watch(() => selectedChatIndex.value, () => {
         }
     })
 })
-
-fetchChats()

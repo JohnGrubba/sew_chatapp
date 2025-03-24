@@ -14,7 +14,7 @@ class ChatUsers(Base):
     username = Column(
         VARCHAR, ForeignKey("users.username", ondelete="cascade"), primary_key=True
     )
-    joined_at = Column(DateTime, default=datetime.utcnow())
+    joined_at = Column(DateTime, default=datetime.now())
 
     # Relationships
     user = relationship("UserModels", back_populates="chats")
@@ -34,7 +34,7 @@ class ChatModels(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(VARCHAR(100), nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow())
+    created_at = Column(DateTime, default=datetime.now())
     created_by = Column(VARCHAR, ForeignKey("users.username", ondelete="cascade"))
 
     # Relationships
@@ -60,7 +60,7 @@ class Message(Base):
         VARCHAR, ForeignKey("users.username", ondelete="cascade"), nullable=False
     )
     content = Column(Text, nullable=False)
-    sent_at = Column(DateTime, default=datetime.utcnow())
+    sent_at = Column(DateTime, default=datetime.now())
 
     # Relationships
     chat = relationship("ChatModels", back_populates="messages")
