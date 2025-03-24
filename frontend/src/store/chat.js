@@ -1,31 +1,56 @@
 import { ref, computed, watch, nextTick } from 'vue'
-import { apiGetChats } from '../api/chat'
+import { computedAsync } from '@vueuse/core'
+import { apiGetChats, apiGetMessages, apiSendMessage } from '../api/chat'
+import { useProfile } from './me'
 
 // Mock data - replace with your actual data source
 export const chats = ref([])
+
+function dateFormatter(date) {
+    return date.toLocaleDateString(navigator.language, { hour: '2-digit', minute: '2-digit' })
+}
 
 const fetchChats = async () => {
     try {
         const res = await apiGetChats()
         chats.value = res.data
-        console.log(chats.value)
     }
     catch (err) {
         console.log("ChatsError", err)
     }
 }
 
+const fetchMessages = async (chatId) => {
+    try {
+        console.log("Fetching messages for chat", chatId)
+        const res = await apiGetMessages(chatId)
+        return res.data
+    }
+    catch (err) {
+        console.log("MessagesError", err)
+    }
+}
 
 export const selectedChatIndex = ref(0)
 export const newMessage = ref('')
 export const messagesContainer = ref(null)
 
-export const selectedChat = computed(() => {
+export const selectedChat = computedAsync(async () => {
     console.log("Chat Switched (load messages)")
+    selectedChatIndex.value = selectedChatIndex.value || chats.value[0].id
+    console.log("Selected Chat Index", selectedChatIndex.value)
+
     if (selectedChatIndex.value !== null) {
-        chats.value[selectedChatIndex.value].messages = [
-            { sender: 'me', text: 'Hello', time: '12:00 PM' },
-        ]
+        const res = await fetchMessages(chats.value[selectedChatIndex.value].id)
+        console.log(res)
+        chats.value[selectedChatIndex.value].messages = res.map((message) => {
+            return {
+                sender: message.sender,
+                text: message.content,
+                time: dateFormatter(new Date(message.sent_at))
+            }
+        })
+
         return chats.value[selectedChatIndex.value]
     }
     return null
@@ -35,14 +60,16 @@ export const selectChat = (index) => {
     selectedChatIndex.value = index
 }
 
-export const sendMessage = () => {
+export const sendMessage = async () => {
     if (!newMessage.value.trim() || !selectedChat.value) return
 
     const message = {
         sender: 'me',
         text: newMessage.value,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        time: dateFormatter(new Date())
     }
+
+    await apiSendMessage(selectedChat.value.id, newMessage.value)
 
     selectedChat.value.messages.push(message)
     selectedChat.value.lastMessage = `You: ${newMessage.value}`
