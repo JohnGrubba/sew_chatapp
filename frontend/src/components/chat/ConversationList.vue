@@ -127,6 +127,11 @@ const filteredUsers = computed(() => {
 function removeChat(chatID) {
     console.log('Removing chat with ID:', chatID)
     apiRemoveChat(chatID)
+    const chatIndex = chats.value.findIndex(chat => chat.id === chatID)
+    if (chatIndex !== -1) {
+        chats.value.splice(chatIndex, 1)
+    }
+
 }
 
 function openNewChatModal() {
@@ -162,6 +167,13 @@ async function createNewChat() {
 
         chatUsers.forEach(user => {
             apiAddMember(chat.data.id, user.username)
+        })
+
+        addNewChat({
+            id: chat.data.id,
+            name: newChatName,
+            members: selectedUsers.value,
+            lastMessage: '',
         })
 
         closeNewChatModal()
