@@ -29,10 +29,10 @@ async def create_chat(
 
 @router.delete("")
 async def delete_chat(
-    chat: chat_schema.DeleteChat,
+    chat_id: int,
     db: ChatCRUD = Depends(get_chat_crud),
 ):
-    return await db.remove_chat(chat.chat_id)
+    return await db.remove_chat(chat_id)
 
 
 @router.patch("")

@@ -13,10 +13,9 @@
                 New Chat
             </button>
         </div>
-        <div v-for="(chat, index) in chats" :key="index" @click="selectChat(index)" :class="[
-            'p-4 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
-            selectedChatIndex === index ? 'bg-gray-100 dark:bg-gray-700' : ''
-        ]">
+        <div v-for="(chat, index) in chats" :key="index" @click="selectChat(index)"
+            class="group relative p-4 flex items-center cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            :class="[selectedChatIndex === index ? 'bg-gray-100 dark:bg-gray-700' : '']">
             <div class="relative">
                 <div
                     class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 flex items-center justify-center text-white font-bold">
@@ -31,6 +30,12 @@
                 <p class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ chat.lastMessage }}</p>
             </div>
             <div class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">{{ chat.time }}</div>
+
+            <button @click.stop="removeChat(chat.id)"
+                class="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                title="Remove chat">
+                <Trash class="h-4 w-4" />
+            </button>
         </div>
 
         <!-- New Chat Modal -->
@@ -96,7 +101,8 @@
 import { ref, computed } from 'vue'
 import { selectChat, chats, selectedChatIndex, addNewChat } from '../../store/chat'
 import { apiGetUserList } from '../../api/user'
-import { apiCreateChat, apiAddMember } from '../../api/chat'
+import { apiCreateChat, apiAddMember, apiRemoveChat } from '../../api/chat'
+import { Trash } from "lucide-vue-next"
 
 // Modal state
 const showNewChatModal = ref(false)
@@ -117,6 +123,11 @@ const filteredUsers = computed(() => {
         user.username.toLowerCase().includes(searchQuery.value.toLowerCase())
     )
 })
+
+function removeChat(chatID) {
+    console.log('Removing chat with ID:', chatID)
+    apiRemoveChat(chatID)
+}
 
 function openNewChatModal() {
     showNewChatModal.value = true

@@ -11,6 +11,7 @@
   "dependencies": {
     "@vueuse/core": "^13.0.0",
     "axios": "^1.6.2",
+    "lucide-vue-next": "^0.487.0",
     "pinia": "^2.1.7",
     "qs": "^6.11.2",
     "tailwindcss": "3",
