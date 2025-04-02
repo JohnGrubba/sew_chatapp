@@ -1,6 +1,6 @@
 import { ref, watch, nextTick } from 'vue'
 import { computedAsync } from '@vueuse/core'
-import { apiGetChats, apiGetMessages, apiSendMessage } from '../api/chat'
+import { apiGetChats, apiGetMembers, apiGetMessages, apiSendMessage } from '../api/chat'
 
 // Mock data - replace with your actual data source
 export const chats = ref([])
@@ -16,6 +16,16 @@ export const fetchChats = async () => {
     }
     catch (err) {
         console.log("ChatsError", err)
+    }
+}
+
+const fetchMembers = async (chatId) => {
+    try {
+        const res = await apiGetMembers(chatId)
+        return res.data
+    }
+    catch (err) {
+        console.log("MembersError", err)
     }
 }
 
@@ -38,7 +48,10 @@ export const selectedChat = computedAsync(async () => {
     console.log("Chat Switched (load messages)")
     if (selectedChatIndex.value !== null) {
         const res = await fetchMessages(chats.value[selectedChatIndex.value].id)
-        console.log(res)
+        console.log("Messages:", res)
+        const members = await fetchMembers(chats.value[selectedChatIndex.value].id)
+        console.log("Members:", members)
+        chats.value[selectedChatIndex.value].members = members
         chats.value[selectedChatIndex.value].messages = res.map((message) => {
             return {
                 sender: message.sender,
@@ -46,7 +59,6 @@ export const selectedChat = computedAsync(async () => {
                 time: dateFormatter(new Date(message.sent_at))
             }
         })
-
         return chats.value[selectedChatIndex.value]
     }
     return null

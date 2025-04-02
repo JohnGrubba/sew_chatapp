@@ -11,6 +11,7 @@
                         ? 'bg-indigo-500 text-white rounded-br-none'
                         : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200 rounded-bl-none'
                 ]">
+                    <p class="text-green-400 text-sm" v-if="message.sender !== 'me'">{{ message.sender }}</p>
                     <p>{{ message.text }}</p>
                     <p class="text-xs mt-1 opacity-70 text-right">{{ message.time }}</p>
                 </div>

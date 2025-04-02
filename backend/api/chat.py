@@ -50,3 +50,11 @@ async def add_member(
     db: ChatCRUD = Depends(get_chat_crud),
 ):
     return await db.add_member(chat.chat_id, chat.username)
+
+
+@router.get("/members")
+async def get_members(
+    chat_id: int,
+    db: ChatCRUD = Depends(get_chat_crud),
+):
+    return await db.get_members(chat_id)

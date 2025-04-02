@@ -13,7 +13,7 @@
             <div class="ml-3">
                 <p class="text-base font-medium text-gray-800 dark:text-white">{{ selectedChat.name }}</p>
                 <p class="text-xs text-gray-500 dark:text-gray-400">
-                    {{ selectedChat.online ? 'Online' : 'Offline' }}
+                    {{ selectedChat.members.join(",") }}
                 </p>
             </div>
         </div>

@@ -96,6 +96,7 @@
 import { ref, computed } from 'vue'
 import { selectChat, chats, selectedChatIndex, addNewChat } from '../../store/chat'
 import { apiGetUserList } from '../../api/user'
+import { apiCreateChat, apiAddMember } from '../../api/chat'
 
 // Modal state
 const showNewChatModal = ref(false)
@@ -136,9 +137,8 @@ function toggleUserSelection(user) {
     }
 }
 
-function createNewChat() {
+async function createNewChat() {
     if (selectedUsers.value.length > 0) {
-        // Get user objects from selected IDs
         const chatUsers = users.value.filter(user => selectedUsers.value.includes(user.username))
 
         // Create a new chat with the selected users
@@ -146,13 +146,11 @@ function createNewChat() {
             ? chatUsers[0].username
             : `${chatUsers[0].username} and ${chatUsers.length - 1} others`
 
-        // Add the new chat to the chat list
-        addNewChat({
-            name: newChatName,
-            lastMessage: 'Start a conversation',
-            time: 'now',
-            online: chatUsers.some(user => user.online),
-            users: chatUsers
+        const chat = await apiCreateChat(newChatName)
+        console.log(chat.data.id)
+
+        chatUsers.forEach(user => {
+            apiAddMember(chat.data.id, user.username)
         })
 
         closeNewChatModal()
