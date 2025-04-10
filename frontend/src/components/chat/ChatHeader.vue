@@ -17,6 +17,7 @@
                 </p>
             </div>
         </div>
+        <!--
         <div class="flex">
             <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mr-4">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -40,6 +41,7 @@
                 </svg>
             </button>
         </div>
+        -->
     </div>
 </template>
 

@@ -70,6 +70,7 @@ class Message(Base):
         self.chat_id = chat_id
         self.sender = sender
         self.content = content
+        self.sent_at = datetime.now()
 
     def __repr__(self) -> str:
         return f"<Message(id={self.id}, chat_id={self.chat_id}, sender={self.sender})>"

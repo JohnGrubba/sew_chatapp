@@ -67,6 +67,29 @@ export const selectedChat = computedAsync(async () => {
 export const selectChat = (index) => {
     selectedChatIndex.value = index
 }
+export const sendFile = async (file) => {
+    if (!file || !selectedChat.value) return
+
+    // Here the file would be uploaded to a cdn
+    const sent = await apiSendMessage(selectedChat.value.id, file.name)
+
+    const message = {
+        sender: 'me',
+        text: file.name,
+        time: dateFormatter(new Date(sent.data.sent_at))
+    }
+
+    selectedChat.value.messages.push(message)
+    selectedChat.value.lastMessage = `You: ${file.name}`
+    selectedChat.value.time = new Date(sent.data.sent_at).toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' })
+
+    // Scroll to bottom of messages
+    nextTick(() => {
+        if (messagesContainer.value) {
+            messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight
+        }
+    })
+}
 
 export const sendMessage = async () => {
     if (!newMessage.value.trim() || !selectedChat.value) return

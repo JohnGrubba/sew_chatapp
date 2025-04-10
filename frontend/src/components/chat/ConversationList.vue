@@ -131,7 +131,6 @@ function removeChat(chatID) {
     if (chatIndex !== -1) {
         chats.value.splice(chatIndex, 1)
     }
-
 }
 
 function openNewChatModal() {

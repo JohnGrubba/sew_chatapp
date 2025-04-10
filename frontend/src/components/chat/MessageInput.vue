@@ -1,7 +1,18 @@
 <template>
     <div class="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
         <div class="flex items-center">
-            <button class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mr-2">
+            <!-- File input is hidden but can be triggered via the button -->
+            <input 
+                type="file" 
+                ref="fileInput" 
+                class="hidden" 
+                @change="handleFileSelected"
+            />
+            <!-- Attachment button now triggers file selection -->
+            <button 
+                @click="triggerFileSelect"
+                class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 mr-2"
+            >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -24,5 +35,24 @@
 </template>
 
 <script setup>
-import { sendMessage, newMessage } from '../../store/chat'
+import { ref } from 'vue';
+import { sendMessage, newMessage, sendFile } from '../../store/chat'
+
+// Reference to the file input element
+const fileInput = ref(null);
+
+// Function to trigger file selection dialog
+const triggerFileSelect = () => {
+    fileInput.value.click();
+};
+
+// Function to handle the selected file and send it
+const handleFileSelected = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        sendFile(file);
+        // Reset file input to allow selecting the same file again
+        event.target.value = '';
+    }
+};
 </script>

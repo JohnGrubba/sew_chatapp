@@ -15,7 +15,7 @@ class MessageCRUD:
         self.db_session = db_session
 
     async def get_messages(self, chat_id: int):
-        stmt = select(Message).where(Message.chat_id == chat_id)
+        stmt = select(Message).where(Message.chat_id == chat_id).order_by(Message.sent_at.asc())
         result = await self.db_session.execute(stmt)
         chats = result.scalars().all()
         return chats
